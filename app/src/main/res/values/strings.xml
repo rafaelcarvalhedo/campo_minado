@@ -3,4 +3,6 @@
     <string name="nivel_facil">Facil</string>
     <string name="nivel_dificil">Dificil</string>
     <string name="nivel_medio">Medio</string>
+    <string name="ganhou">Parabéns você ganhou neste nível</string>
+    <string name="perdeu">Parabéns você perdeu</string>
 </resources>

@@ -7,4 +7,8 @@ public abstract class Campo {
     public void abrirCampo(){
         this.aberto = true;
     }
+
+    public boolean isAberto() {
+        return aberto;
+    }
 }

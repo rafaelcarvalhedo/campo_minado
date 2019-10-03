@@ -1,5 +1,7 @@
 package br.pucgoias.negocio;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import br.pucgoias.modelo.Campo;
@@ -9,46 +11,55 @@ import br.pucgoias.modelo.NivelJogoEnum;
 
 public class Tabuleiro {
 
-    private Campo[][] slots;
-    private NivelJogoEnum nivelJogoEnum;
+    private List<Campo> slots;
+    private final NivelJogoEnum nivelJogoEnum;
 
-    private static final int NUMERO_SLOTS_X = 7;
-    private static final int NUMERO_SLOTS_Y = 6;
+    private static final int NUMERO_SLOTS_X = 4;
+    private static final int NUMERO_SLOTS_Y = 9;
 
-    public Tabuleiro(NivelJogoEnum nivelJogoEnum){
+    public Tabuleiro(NivelJogoEnum nivelJogoEnum) {
         this.nivelJogoEnum = nivelJogoEnum;
         this.iniciarTabuleiro();
     }
 
-    private void iniciarTabuleiro(){
+    private void iniciarTabuleiro() {
         //Instancia matriz com a quantidade de slots
-        slots = new Campo[NUMERO_SLOTS_X][NUMERO_SLOTS_Y];
+        slots = new ArrayList<Campo>();
 
         //Inicializa a matriz como os campos livres
-        for(int x = 0 ; x < NUMERO_SLOTS_X ; x++){
-            for(int y = 0; y < NUMERO_SLOTS_Y; y++){
-                slots[x][y] = new CampoLivre();
-            }
+        for (int x = 0; x < NUMERO_SLOTS_X * NUMERO_SLOTS_Y; x++) {
+            slots.add(new CampoLivre());
         }
 
         //Adicionas a quantidade de minas de acordo com o nível em posições aleatorias
-        for(int i = 0; i < nivelJogoEnum.getQuantidadeMinas(); i ++){
+        for (int i = 0; i < nivelJogoEnum.getQuantidadeMinas(); i++) {
             adicionarMinaAleaorio();
         }
     }
 
-    private void adicionarMinaAleaorio(){
+    private void adicionarMinaAleaorio() {
         Random random = new Random();
-        int posX = random.nextInt(NUMERO_SLOTS_X);
-        int posY = random.nextInt(NUMERO_SLOTS_Y);
-        slots[posX][posY] = new Mina();
+        int pos = random.nextInt(NUMERO_SLOTS_X * NUMERO_SLOTS_Y - 1);
+        if (slots.get(pos) instanceof Mina) {
+            adicionarMinaAleaorio();
+        } else {
+            slots.set(pos, new Mina());
+        }
     }
 
-    public int getNumeroSlots(){
+    public int getNumeroSlots() {
         return NUMERO_SLOTS_X * NUMERO_SLOTS_Y;
     }
 
-    public Campo getCampo(int posicao){
-        return slots[posicao/NUMERO_SLOTS_X][posicao%NUMERO_SLOTS_Y];
+    public Campo getCampo(int posicao) {
+        return slots.get(posicao);
+    }
+
+    public Integer getNumeroCamposAbertos() {
+        return (int) slots.stream().filter(p -> p.isAberto() && p instanceof CampoLivre).count();
+    }
+
+    public Integer getNumeroCampoMinadoAbertos() {
+        return (int) slots.stream().filter(p -> p.isAberto() && p instanceof Mina).count();
     }
 }

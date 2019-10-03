@@ -8,8 +8,8 @@ public enum NivelJogoEnum {
     MEDIO(R.string.nivel_medio,15),
     DIFICIL(R.string.nivel_dificil,25);
 
-    private int stringResource;
-    private int quantidadeMinas;
+    private final int stringResource;
+    private final int quantidadeMinas;
 
     NivelJogoEnum(int stringResource, int quantidadeMinas) {
         this.stringResource = stringResource;
@@ -18,10 +18,6 @@ public enum NivelJogoEnum {
 
     public int getStringResource() {
         return stringResource;
-    }
-
-    public void setStringResource(int stringResource) {
-        this.stringResource = stringResource;
     }
 
     public int getQuantidadeMinas() {
